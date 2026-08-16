@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="zh-Hant-TW">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>故意不安全的前端 Demo</title>
+    <link rel="icon" href="data:," />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="warning-banner" role="alert">
+      <strong>課堂示範：此頁面故意包含安全漏洞</strong>
+      <span>所有帳號、密碼與 API key 都是假資料。不可部署、不可連接真實服務。</span>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <p class="eyebrow">CODEX SECURITY PLUGIN DEMO</p>
+        <h1 id="page-title">前端敏感資料暴露實驗室</h1>
+        <p class="hero-copy">
+          這個靜態頁面刻意示範兩類問題：把 API key 打包進前端，以及在瀏覽器中明文紀錄帳號密碼。
+        </p>
+      </section>
+
+      <section class="demo-grid" aria-label="漏洞示範區">
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step-label">DEMO 01</p>
+              <h2>明文帳密紀錄</h2>
+            </div>
+            <span class="risk-badge">高風險</span>
+          </div>
+
+          <p class="panel-copy">
+            送出後，假帳密會被故意寫入瀏覽器儲存空間與開發者工具 console。
+          </p>
+
+          <form id="demo-login-form">
+            <label for="account">帳號</label>
+            <input
+              id="account"
+              name="account"
+              type="email"
+              value="student.demo@tair.example"
+              autocomplete="username"
+              required
+            />
+
+            <label for="password">密碼</label>
+            <input
+              id="password"
+              name="password"
+              type="text"
+              value="FAKE-Plaintext-Password-2026"
+              autocomplete="current-password"
+              required
+            />
+
+            <p class="field-note">密碼欄位刻意使用明文顯示，方便課堂觀察。</p>
+
+            <div class="button-row">
+              <button class="primary-button" type="submit">模擬不安全登入</button>
+              <button class="secondary-button" id="clear-demo-data" type="button">
+                清除瀏覽器紀錄
+              </button>
+            </div>
+          </form>
+
+          <output id="login-result" class="result-box" aria-live="polite">
+            尚未寫入假帳密。
+          </output>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <p class="step-label">DEMO 02</p>
+              <h2>前端 API key 暴露</h2>
+            </div>
+            <span class="risk-badge">高風險</span>
+          </div>
+
+          <p class="panel-copy">
+            下列字串會隨 JavaScript 一起送到瀏覽器。即使 UI 不顯示，使用者仍可檢查原始碼與 bundle。
+          </p>
+
+          <dl id="exposed-key-list" class="key-list"></dl>
+
+          <button class="primary-button full-width" id="inspect-config" type="button">
+            模擬讀取前端設定
+          </button>
+          <output id="config-result" class="result-box" aria-live="polite">
+            尚未讀取設定。
+          </output>
+        </article>
+      </section>
+
+      <section class="inspection-guide" aria-labelledby="inspection-title">
+        <div>
+          <p class="step-label">課堂檢查提示</p>
+          <h2 id="inspection-title">從哪裡找到證據？</h2>
+        </div>
+        <ol>
+          <li>用 Codex Security Plugin 掃描 <code>security-demo/</code>。</li>
+          <li>在瀏覽器 DevTools 查看 Sources、Console 與 Application。</li>
+          <li>比對 finding 的檔案位置、資料流、影響與修復方向。</li>
+        </ol>
+      </section>
+    </main>
+
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
